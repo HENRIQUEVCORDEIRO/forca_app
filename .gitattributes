@@ -1,0 +1,11 @@
+# Normalizacao de fim de linha.
+#
+# O repositorio guarda sempre LF. Na area de trabalho cada maquina usa o
+# fim de linha nativo (CRLF no Windows, LF no Linux/macOS), o que mantem
+# o diff limpo sem depender de configuracao individual de cada integrante.
+* text=auto
+
+# Arquivos binarios: nunca converter fim de linha nem mexer no conteudo.
+*.pdf binary
+*.png binary
+*.ttf binary
