@@ -41,10 +41,13 @@ class HintPanel extends StatelessWidget {
             icon: const Icon(Icons.lightbulb_outline),
           ),
         ),
-        if (currentHint != null) ...<Widget>[
-          const SizedBox(height: 4),
-          _HintCard(text: currentHint),
-        ],
+        const SizedBox(height: 4),
+        SizedBox(
+          height: 64,
+          child: currentHint == null
+              ? const SizedBox.shrink()
+              : _HintCard(text: currentHint),
+        ),
       ],
     );
   }
@@ -60,11 +63,17 @@ class _HintCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
+      alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: AppColors.accent.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(text, style: const TextStyle(color: AppColors.accent)),
+      child: Text(
+        text,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(color: AppColors.accent),
+      ),
     );
   }
 }

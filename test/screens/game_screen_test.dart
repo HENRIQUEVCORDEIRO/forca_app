@@ -56,15 +56,23 @@ Widget _app({
 Finder _inBoard(Finder finder) =>
     find.descendant(of: find.byType(AnswerBoard), matching: finder);
 
+Future<void> _pump(WidgetTester tester, Widget app) async {
+  tester.view.physicalSize = const Size(400, 820);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.reset);
+  await tester.pumpWidget(app);
+}
+
 void main() {
   testWidgets('mostra a palavra oculta com underlines', (tester) async {
-    await tester.pumpWidget(_app());
+    await _pump(tester, _app());
 
     expect(_inBoard(find.text('_')), findsNWidgets(4));
   });
 
   testWidgets('revela apenas as letras descobertas', (tester) async {
-    await tester.pumpWidget(
+    await _pump(
+      tester,
       _app(
         words: const <List<AnswerDisplayChar>>[
           <AnswerDisplayChar>[
@@ -80,7 +88,7 @@ void main() {
   });
 
   testWidgets('exibe o teclado QWERTY completo', (tester) async {
-    await tester.pumpWidget(_app());
+    await _pump(tester, _app());
 
     const String letters = 'QWERTYUIOPASDFGHJKLZXCVBNM';
     for (final String letter in letters.split('')) {
@@ -90,7 +98,7 @@ void main() {
 
   testWidgets('dispara o callback ao tocar numa letra nova', (tester) async {
     String? selected;
-    await tester.pumpWidget(_app(onLetterSelected: (l) => selected = l));
+    await _pump(tester, _app(onLetterSelected: (l) => selected = l));
 
     await tester.tap(find.text('Q'));
 
@@ -99,7 +107,8 @@ void main() {
 
   testWidgets('não dispara o callback para letra já usada', (tester) async {
     String? selected;
-    await tester.pumpWidget(
+    await _pump(
+      tester,
       _app(
         usedLetters: const <String>{'Q'},
         onLetterSelected: (l) => selected = l,
@@ -113,7 +122,8 @@ void main() {
 
   testWidgets('não dispara o callback com o jogo encerrado', (tester) async {
     String? selected;
-    await tester.pumpWidget(
+    await _pump(
+      tester,
       _app(status: CharacterStatus.won, onLetterSelected: (l) => selected = l),
     );
 
@@ -124,7 +134,7 @@ void main() {
 
   testWidgets('solicita a dica pelo botão', (tester) async {
     int requested = 0;
-    await tester.pumpWidget(_app(onRequestHint: () => requested++));
+    await _pump(tester, _app(onRequestHint: () => requested++));
 
     await tester.tap(find.byIcon(Icons.lightbulb_outline));
 
@@ -132,26 +142,36 @@ void main() {
   });
 
   testWidgets('exibe a dica quando disponível', (tester) async {
-    await tester.pumpWidget(_app(hint: 'Animal doméstico', isHintUsed: true));
+    await _pump(tester, _app(hint: 'Animal doméstico', isHintUsed: true));
 
     expect(find.text('Animal doméstico'), findsOneWidget);
   });
 
   testWidgets('mostra a vitória e permite jogar novamente', (tester) async {
     int played = 0;
-    await tester.pumpWidget(
+    await _pump(
+      tester,
       _app(status: CharacterStatus.won, onPlayAgain: () => played++),
     );
 
     expect(find.text('Você venceu!'), findsOneWidget);
 
-    await tester.tap(find.text('Jogar novamente'));
+    await tester.tapAt(tester.getCenter(find.byType(GameScreen)));
 
     expect(played, 1);
   });
 
+  testWidgets('não reinicia ao tocar na tela durante o jogo', (tester) async {
+    int played = 0;
+    await _pump(tester, _app(onPlayAgain: () => played++));
+
+    await tester.tapAt(tester.getCenter(find.byType(GameScreen)));
+
+    expect(played, 0);
+  });
+
   testWidgets('mostra a derrota', (tester) async {
-    await tester.pumpWidget(_app(status: CharacterStatus.lost));
+    await _pump(tester, _app(status: CharacterStatus.lost));
 
     expect(find.text('Você perdeu!'), findsOneWidget);
   });

@@ -47,55 +47,58 @@ class GameScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: <Widget>[
-                  _TopBar(
-                    categoryLabel: categoryLabel,
-                    difficultyLabel: difficultyLabel,
-                    onExit: onExit,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _isPlaying ? null : onPlayAgain,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: <Widget>[
+                _TopBar(
+                  categoryLabel: categoryLabel,
+                  difficultyLabel: difficultyLabel,
+                  onExit: onExit,
+                ),
+                const SizedBox(height: 8),
+                Visibility(
+                  visible: !_isPlaying,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: _ResultMessage(won: status == CharacterStatus.won),
+                ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: HangmanCharacter(
+                    assets:
+                        characterAssets ??
+                        HangmanCharacterAssets.standard(
+                          maxMistakes: maxMistakes,
+                        ),
+                    mistakes: mistakes,
+                    maxMistakes: maxMistakes,
+                    status: status,
                   ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: HangmanCharacter(
-                      assets:
-                          characterAssets ??
-                          HangmanCharacterAssets.standard(
-                            maxMistakes: maxMistakes,
-                          ),
-                      mistakes: mistakes,
-                      maxMistakes: maxMistakes,
-                      status: status,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AnswerBoard(words: words),
-                  const SizedBox(height: 12),
-                  HintPanel(
-                    hint: hint,
-                    isHintUsed: isHintUsed,
-                    enabled: _isPlaying,
-                    onRequestHint: onRequestHint,
-                  ),
-                  const SizedBox(height: 12),
-                  LetterKeyboard(
-                    rows: LetterKeyboard.qwertyRows,
-                    usedLetters: usedLetters,
-                    enabled: _isPlaying,
-                    onLetterSelected: onLetterSelected,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 8),
+                AnswerBoard(words: words),
+                const SizedBox(height: 12),
+                HintPanel(
+                  hint: hint,
+                  isHintUsed: isHintUsed,
+                  enabled: _isPlaying,
+                  onRequestHint: onRequestHint,
+                ),
+                const SizedBox(height: 12),
+                LetterKeyboard(
+                  rows: LetterKeyboard.qwertyRows,
+                  usedLetters: usedLetters,
+                  enabled: _isPlaying,
+                  onLetterSelected: onLetterSelected,
+                ),
+              ],
             ),
-            if (!_isPlaying)
-              _ResultOverlay(
-                won: status == CharacterStatus.won,
-                onPlayAgain: onPlayAgain,
-              ),
-          ],
+          ),
         ),
       ),
     );
@@ -163,45 +166,37 @@ class _InfoChip extends StatelessWidget {
   }
 }
 
-class _ResultOverlay extends StatelessWidget {
-  const _ResultOverlay({required this.won, required this.onPlayAgain});
+class _ResultMessage extends StatelessWidget {
+  const _ResultMessage({required this.won});
 
   final bool won;
-  final VoidCallback onPlayAgain;
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: ColoredBox(
-        color: AppColors.accent.withValues(alpha: 0.92),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                won ? 'Você venceu!' : 'Você perdeu!',
-                style: AppTextStyles.title.copyWith(
-                  fontSize: 40,
-                  color: AppColors.onAccent,
-                ),
-              ),
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: onPlayAgain,
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.onAccent,
-                  foregroundColor: AppColors.accent,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 14,
-                  ),
-                ),
-                child: const Text('Jogar novamente'),
-              ),
-            ],
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.accent,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Text(
+            won ? 'Você venceu!' : 'Você perdeu!',
+            style: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: AppColors.onAccent,
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 6),
+        const Text(
+          'Toque na tela para jogar novamente',
+          style: TextStyle(color: AppColors.accent),
+        ),
+      ],
     );
   }
 }
