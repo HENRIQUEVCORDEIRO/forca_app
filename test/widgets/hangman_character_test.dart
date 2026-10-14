@@ -141,4 +141,29 @@ void main() {
     await tester.pump();
     expect(_currentImage(tester), 'idle_5.png');
   });
+
+  testWidgets('volta ao idle do frame inicial ao jogar novamente', (
+    tester,
+  ) async {
+    await _pump(tester, mistakes: 5, status: CharacterStatus.playing);
+    await _pump(tester, mistakes: 0, status: CharacterStatus.playing);
+    await tester.pump();
+
+    expect(_currentImage(tester), 'idle_0.png');
+  });
+
+  testWidgets('reinicia no idle inicial ao sair do estado perdido', (
+    tester,
+  ) async {
+    await _pump(tester, mistakes: 5, status: CharacterStatus.playing);
+    await _pump(tester, mistakes: 5, status: CharacterStatus.lost);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+    expect(_currentImage(tester), 'idle_5.png');
+
+    await _pump(tester, mistakes: 0, status: CharacterStatus.playing);
+    await tester.pump();
+
+    expect(_currentImage(tester), 'idle_0.png');
+  });
 }

@@ -92,16 +92,27 @@ class _HangmanCharacterState extends State<HangmanCharacter>
   @override
   void didUpdateWidget(covariant HangmanCharacter oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.mistakes != oldWidget.mistakes) {
+    if (widget.mistakes > oldWidget.mistakes) {
       _enqueue(widget.assets.errorImages[_stage] ?? const <ImageProvider>[]);
+    } else if (widget.mistakes < oldWidget.mistakes) {
+      _resetToIdle();
     }
     if (widget.status != oldWidget.status) {
       if (widget.status == CharacterStatus.won) {
         _enqueue(widget.assets.victoryImages);
       } else if (widget.status == CharacterStatus.lost) {
         _enqueue(widget.assets.defeatImages);
+      } else {
+        _resetToIdle();
       }
     }
+  }
+
+  void _resetToIdle() {
+    _queue.clear();
+    _playing = false;
+    _controller.stop();
+    _showIdle();
   }
 
   @override
