@@ -5,13 +5,15 @@ import 'package:hangman_game/widgets/letter_keyboard.dart';
 Widget _host(Widget child) => MaterialApp(home: Scaffold(body: child));
 
 void main() {
-  const List<String> letters = <String>['A', 'B', 'C'];
+  const List<List<String>> rows = <List<String>>[
+    <String>['A', 'B', 'C'],
+  ];
 
   testWidgets('exibe todas as letras disponíveis', (tester) async {
     await tester.pumpWidget(
       _host(
         LetterKeyboard(
-          letters: letters,
+          rows: rows,
           usedLetters: const <String>{},
           enabled: true,
           onLetterSelected: (_) {},
@@ -31,7 +33,7 @@ void main() {
     await tester.pumpWidget(
       _host(
         LetterKeyboard(
-          letters: letters,
+          rows: rows,
           usedLetters: const <String>{},
           enabled: true,
           onLetterSelected: (String letter) => selected = letter,
@@ -49,7 +51,7 @@ void main() {
     await tester.pumpWidget(
       _host(
         LetterKeyboard(
-          letters: letters,
+          rows: rows,
           usedLetters: const <String>{'A'},
           enabled: true,
           onLetterSelected: (String letter) => selected = letter,
@@ -67,7 +69,7 @@ void main() {
     await tester.pumpWidget(
       _host(
         LetterKeyboard(
-          letters: letters,
+          rows: rows,
           usedLetters: const <String>{},
           enabled: false,
           onLetterSelected: (String letter) => selected = letter,

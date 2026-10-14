@@ -18,7 +18,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Dica'));
+    await tester.tap(find.byIcon(Icons.lightbulb_outline));
 
     expect(requested, 1);
   });
@@ -38,7 +38,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Dica'));
+    await tester.tap(find.byIcon(Icons.lightbulb_outline));
 
     expect(requested, 0);
   });
@@ -56,7 +56,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Dica'));
+    await tester.tap(find.byIcon(Icons.lightbulb_outline));
 
     expect(requested, 0);
   });
@@ -88,6 +88,6 @@ void main() {
       ),
     );
 
-    expect(find.byType(Text), findsOneWidget);
+    expect(find.byType(Text), findsNothing);
   });
 }

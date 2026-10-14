@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+
 @immutable
 class AnswerDisplayChar {
   const AnswerDisplayChar({required this.text, required this.isRevealed});
@@ -56,10 +58,9 @@ class _AnswerLetterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
     return SizedBox(
       width: 30,
-      height: 40,
+      height: 42,
       child: Center(
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -67,7 +68,9 @@ class _AnswerLetterTile extends StatelessWidget {
             character.isRevealed ? character.text : '_',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: character.isRevealed ? colors.onSurface : colors.outline,
+              color: character.isRevealed
+                  ? AppColors.accent
+                  : AppColors.keyboardButton,
             ),
           ),
         ),
