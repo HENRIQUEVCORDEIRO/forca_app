@@ -48,8 +48,11 @@ flutter:
   uses-material-design: true
 
   assets:
+    # ATENCAO: assets/forca.png e assets/scream.ttf sao placeholders
+    # provisorios, criados para destravar o build enquanto os arquivos
+    # definitivos nao sao restaurados. Substitua-os pelos originais.
     - assets/forca.png
-    - hangman.json
+    - assets/data/hangman_entries.json
 
   fonts:
     - family: HangmanFont
