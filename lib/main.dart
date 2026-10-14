@@ -22,7 +22,7 @@ class TelaInicial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF9CB096),
+      backgroundColor: Color(0xFFE6E6FA),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +36,7 @@ class TelaInicial extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'HangmanFont',
                     fontSize: 48,
-                    color: Colors.red,
+                    color: Color(0xFF8A2BE2),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -45,7 +45,7 @@ class TelaInicial extends StatelessWidget {
             const SizedBox(height: 60),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5C3A21),
+                backgroundColor: Color(0xFF8A2BE2),
                 padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -57,7 +57,7 @@ class TelaInicial extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'HangmanFont',
                   fontSize: 28,
-                  color: Colors.red,
+                  color: Color(0xFF808080),
                   fontWeight: FontWeight.bold,
                 ),
               ),
