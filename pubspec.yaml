@@ -61,6 +61,12 @@ flutter:
   assets:
     - assets/data/hangman_entries.json
     - assets/images/character/frames/
+    - assets/forca.png
+
+  fonts:
+    - family: HangmanFont
+      fonts:
+        - asset: assets/scream.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
