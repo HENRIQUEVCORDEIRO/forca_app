@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forca_app/data/entries_load_exception.dart';
-import 'package:forca_app/domain/answer_category.dart';
-import 'package:forca_app/domain/difficulty.dart';
-import 'package:forca_app/domain/hangman_entry.dart';
+import 'package:hangman_game/data/entries_load_exception.dart';
+import 'package:hangman_game/domain/answer_category.dart';
+import 'package:hangman_game/domain/difficulty.dart';
+import 'package:hangman_game/domain/hangman_entry.dart';
 
 Map<String, dynamic> entryJson(
   String answer, {

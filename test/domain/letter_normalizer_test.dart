@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forca_app/domain/letter_normalizer.dart';
+import 'package:hangman_game/domain/letter_normalizer.dart';
 
 void main() {
   group('LetterNormalizer', () {

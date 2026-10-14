@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forca_app/domain/answer_character.dart';
+import 'package:hangman_game/domain/answer_character.dart';
 
 void main() {
   group('AnswerCharacter', () {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:forca_app/data/entries_load_exception.dart';
-import 'package:forca_app/domain/answer_category.dart';
+import 'package:hangman_game/data/entries_load_exception.dart';
+import 'package:hangman_game/domain/answer_category.dart';
 
 void main() {
   group('AnswerCategory', () {
