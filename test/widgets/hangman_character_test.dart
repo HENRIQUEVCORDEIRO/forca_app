@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hangman_game/widgets/hangman_character.dart';
 
 HangmanCharacterAssets _assets() => HangmanCharacterAssets(
   idleImages: <ImageProvider>[
-    for (var stage = 0; stage <= 6; stage++) AssetImage('idle_$stage.png'),
+    for (var stage = 0; stage <= 5; stage++) AssetImage('idle_$stage.png'),
   ],
   errorImages: <int, List<ImageProvider>>{
     1: <ImageProvider>[
@@ -12,9 +13,9 @@ HangmanCharacterAssets _assets() => HangmanCharacterAssets(
       const AssetImage('e1_1.png'),
       const AssetImage('e1_2.png'),
     ],
-    6: <ImageProvider>[
-      const AssetImage('e6_0.png'),
-      const AssetImage('e6_1.png'),
+    5: <ImageProvider>[
+      const AssetImage('e5_0.png'),
+      const AssetImage('e5_1.png'),
     ],
   },
   victoryImages: <ImageProvider>[
@@ -40,7 +41,7 @@ Future<void> _pump(
         body: HangmanCharacter(
           assets: _assets(),
           mistakes: mistakes,
-          maxMistakes: 6,
+          maxMistakes: 5,
           status: status,
           frameDuration: const Duration(milliseconds: 100),
         ),
@@ -50,25 +51,37 @@ Future<void> _pump(
 }
 
 void main() {
-  test('standard assets seguem a convenção de nomes', () {
-    final HangmanCharacterAssets assets = HangmanCharacterAssets.standard(
-      maxMistakes: 6,
+  test('os frames do personagem estão disponíveis como asset', () async {
+    final ByteData data = await rootBundle.load(
+      'assets/images/character/frames/frame_00000.png',
     );
 
+    expect(data.lengthInBytes, greaterThan(0));
+  });
+
+  test('standard assets seguem a convenção de nomes', () {
+    final HangmanCharacterAssets assets = HangmanCharacterAssets.standard();
+
+    expect(assets.idleImages, hasLength(6));
     expect(
       (assets.idleImages.first as AssetImage).assetName,
-      'assets/images/character/idle_00.png',
+      'assets/images/character/frames/frame_00000.png',
     );
+    expect(
+      (assets.idleImages.last as AssetImage).assetName,
+      'assets/images/character/frames/frame_00022.png',
+    );
+    expect(assets.errorImages[1], hasLength(4));
     expect(
       (assets.errorImages[1]!.first as AssetImage).assetName,
-      'assets/images/character/error_01/frame_00.png',
+      'assets/images/character/frames/frame_00000.png',
     );
+    expect(assets.errorImages[5], hasLength(10));
     expect(
-      (assets.victoryImages.first as AssetImage).assetName,
-      'assets/images/character/victory/frame_00.png',
+      (assets.errorImages[5]!.last as AssetImage).assetName,
+      'assets/images/character/frames/frame_00022.png',
     );
-    expect(assets.idleImages, hasLength(7));
-    expect(assets.errorImages[6], hasLength(5));
+    expect(assets.victoryImages, isEmpty);
   });
 
   testWidgets('começa no idle do estágio inicial', (tester) async {
@@ -89,7 +102,7 @@ void main() {
     expect(_currentImage(tester), 'idle_1.png');
   });
 
-  testWidgets('toca a vitória e volta ao idle', (tester) async {
+  testWidgets('toca a vitória quando ela existe', (tester) async {
     await _pump(tester, mistakes: 2, status: CharacterStatus.playing);
     await _pump(tester, mistakes: 2, status: CharacterStatus.won);
 
@@ -102,23 +115,23 @@ void main() {
   });
 
   testWidgets('toca a derrota e volta ao idle final', (tester) async {
-    await _pump(tester, mistakes: 6, status: CharacterStatus.playing);
-    await _pump(tester, mistakes: 6, status: CharacterStatus.lost);
+    await _pump(tester, mistakes: 5, status: CharacterStatus.playing);
+    await _pump(tester, mistakes: 5, status: CharacterStatus.lost);
 
     await tester.pump();
     expect(_currentImage(tester), 'lose_0.png');
 
     await tester.pump(const Duration(seconds: 1));
     await tester.pump();
-    expect(_currentImage(tester), 'idle_6.png');
+    expect(_currentImage(tester), 'idle_5.png');
   });
 
   testWidgets('encadeia o clipe de erro e depois a derrota', (tester) async {
-    await _pump(tester, mistakes: 5, status: CharacterStatus.playing);
-    await _pump(tester, mistakes: 6, status: CharacterStatus.lost);
+    await _pump(tester, mistakes: 4, status: CharacterStatus.playing);
+    await _pump(tester, mistakes: 5, status: CharacterStatus.lost);
 
     await tester.pump();
-    expect(_currentImage(tester), 'e6_0.png');
+    expect(_currentImage(tester), 'e5_0.png');
 
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump();
@@ -126,6 +139,6 @@ void main() {
 
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump();
-    expect(_currentImage(tester), 'idle_6.png');
+    expect(_currentImage(tester), 'idle_5.png');
   });
 }

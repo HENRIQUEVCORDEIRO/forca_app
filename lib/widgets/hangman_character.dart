@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 enum CharacterStatus { playing, won, lost }
 
-String _twoDigits(int value) => value.toString().padLeft(2, '0');
+String _framePath(int frame) =>
+    'assets/images/character/frames/frame_${frame.toString().padLeft(5, '0')}.png';
 
 class HangmanCharacterAssets {
   const HangmanCharacterAssets({
@@ -17,46 +18,36 @@ class HangmanCharacterAssets {
   final List<ImageProvider> victoryImages;
   final List<ImageProvider> defeatImages;
 
-  static const Map<int, int> _errorFrameCounts = <int, int>{
+  static const Map<int, int> _idleFrames = <int, int>{
+    0: 0,
     1: 3,
-    2: 3,
-    3: 4,
-    4: 4,
-    5: 5,
-    6: 5,
+    2: 7,
+    3: 10,
+    4: 13,
+    5: 22,
   };
 
-  factory HangmanCharacterAssets.standard({int maxMistakes = 6}) {
+  static const Map<int, List<int>> _errorFrames = <int, List<int>>{
+    1: <int>[0, 1, 2, 3],
+    2: <int>[3, 4, 5, 6, 7],
+    3: <int>[7, 8, 9, 10],
+    4: <int>[10, 11, 12, 13],
+    5: <int>[13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+  };
+
+  factory HangmanCharacterAssets.standard({int maxMistakes = 5}) {
     return HangmanCharacterAssets(
       idleImages: <ImageProvider>[
         for (var stage = 0; stage <= maxMistakes; stage++)
-          AssetImage('assets/images/character/idle_${_twoDigits(stage)}.png'),
+          AssetImage(_framePath(_idleFrames[stage] ?? 0)),
       ],
       errorImages: <int, List<ImageProvider>>{
         for (var stage = 1; stage <= maxMistakes; stage++)
           stage: <ImageProvider>[
-            for (
-              var frame = 0;
-              frame < (_errorFrameCounts[stage] ?? 0);
-              frame++
-            )
-              AssetImage(
-                'assets/images/character/error_${_twoDigits(stage)}/frame_${_twoDigits(frame)}.png',
-              ),
+            for (final int frame in _errorFrames[stage] ?? const <int>[])
+              AssetImage(_framePath(frame)),
           ],
       },
-      victoryImages: <ImageProvider>[
-        for (var frame = 0; frame < 5; frame++)
-          AssetImage(
-            'assets/images/character/victory/frame_${_twoDigits(frame)}.png',
-          ),
-      ],
-      defeatImages: <ImageProvider>[
-        for (var frame = 0; frame < 6; frame++)
-          AssetImage(
-            'assets/images/character/defeat/frame_${_twoDigits(frame)}.png',
-          ),
-      ],
     );
   }
 }
