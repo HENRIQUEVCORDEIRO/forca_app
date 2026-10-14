@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'theme/app_theme.dart';
+
 void main() {
   runApp(const ForcaApp());
 }
@@ -9,9 +11,10 @@ class ForcaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TelaInicial(),
+      theme: AppTheme.build(),
+      home: const TelaInicial(),
     );
   }
 }
@@ -22,43 +25,40 @@ class TelaInicial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF9CB096),
+      backgroundColor: AppColors.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Stack(
               alignment: Alignment.center,
-              children: [
+              children: <Widget>[
                 Image.asset('assets/forca.png', height: 350),
-                const Text(
+                Text(
                   'HANGMAN',
-                  style: TextStyle(
-                    fontFamily: 'HangmanFont',
-                    fontSize: 48,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTextStyles.title.copyWith(fontSize: 48),
                 ),
               ],
             ),
             const SizedBox(height: 60),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5C3A21),
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                backgroundColor: AppColors.accent,
+                foregroundColor: AppColors.onAccent,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 50,
+                  vertical: 15,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
               onPressed: () {},
-              child: const Text(
+              child: Text(
                 'JOGAR',
-                style: TextStyle(
-                  fontFamily: 'HangmanFont',
+                style: AppTextStyles.title.copyWith(
                   fontSize: 28,
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
+                  color: AppColors.onAccent,
                 ),
               ),
             ),
