@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 enum AnswerCategory { animals, humanBody, sports, technology }
+
 enum Difficulty { easy, medium, hard }
 
 class GameController extends ChangeNotifier {
   AnswerCategory? selectedCategory;
   Difficulty? selectedDifficulty;
-  
+
   int errors = 0;
   final int maxErrors = 6;
   bool isGameOver = false;
