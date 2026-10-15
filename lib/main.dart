@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'screens/game_screen.dart';
 import 'theme/app_theme.dart';
+import 'widgets/answer_board.dart';
+import 'widgets/hangman_character.dart';
 
 void main() {
   runApp(const ForcaApp());
@@ -53,7 +56,27 @@ class TelaInicial extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push<void>(
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => GameScreen(
+                      categoryLabel: 'Animais',
+                      difficultyLabel: 'Fácil',
+                      mistakes: 0,
+                      maxMistakes: 6,
+                      status: CharacterStatus.playing,
+                      words: const <List<AnswerDisplayChar>>[],
+                      usedLetters: const <String>{},
+                      hint: null,
+                      isHintUsed: false,
+                      onLetterSelected: (_) {},
+                      onRequestHint: () {},
+                      onPlayAgain: () {},
+                      onExit: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                );
+              },
               child: Text(
                 'JOGAR',
                 style: AppTextStyles.title.copyWith(
