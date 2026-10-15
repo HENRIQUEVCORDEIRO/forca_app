@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hangman_game/domain/answer_category.dart';
 import 'package:hangman_game/screens/game_screen.dart';
 import 'package:hangman_game/widgets/answer_board.dart';
 import 'package:hangman_game/widgets/hangman_character.dart';
@@ -31,11 +32,13 @@ Widget _app({
   ValueChanged<String>? onLetterSelected,
   VoidCallback? onRequestHint,
   VoidCallback? onPlayAgain,
+  ValueChanged<AnswerCategory>? onCategoryChanged,
   VoidCallback? onExit,
 }) {
   return MaterialApp(
     home: GameScreen(
       categoryLabel: 'Animais',
+      onCategoryChanged: onCategoryChanged ?? (_) {},
       difficultyLabel: 'Fácil',
       mistakes: mistakes,
       maxMistakes: maxMistakes,
@@ -94,6 +97,20 @@ void main() {
     for (final String letter in letters.split('')) {
       expect(find.text(letter), findsOneWidget);
     }
+  });
+
+  testWidgets('permite selecionar outra categoria no topbar', (tester) async {
+    AnswerCategory? selectedCategory;
+    await _pump(
+      tester,
+      _app(onCategoryChanged: (category) => selectedCategory = category),
+    );
+
+    await tester.tap(find.text('Animais'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tecnologia').last);
+
+    expect(selectedCategory, AnswerCategory.technology);
   });
 
   testWidgets('dispara o callback ao tocar numa letra nova', (tester) async {
