@@ -46,7 +46,7 @@ analysis_options.yaml                   # regras do analyzer (flutter_lints) e p
 
 lib/
 ├── main.dart                           # app, seleção de categoria/dificuldade, rota e estado da rodada
-├── domain/                             # regras de negócio puras, sem depender do Flutter
+├── domain/                             # regras de negócio 
 │   ├── answer_category.dart            # enum das categorias, com rótulo em português
 │   ├── difficulty.dart                 # enum das dificuldades, com rótulo em português
 │   ├── answer_character.dart           # um caractere da resposta: letra ou caractere estrutural
@@ -69,7 +69,7 @@ lib/
 
 assets/
 ├── data/
-│   └── hangman_entries.json            # as 120 respostas com categoria, dificuldade e dicas
+│   └── hangman_entries.json            # as 120 respostas com categoria, dificuldade e dicas. Era o hangman.json antes 
 └── images/character/frames/             # quadros da animação da forca
 
 test/                                   # espelha a pasta lib/ arquivo a arquivo
