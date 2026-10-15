@@ -22,7 +22,7 @@ class TelaInicial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE6E6FA),
+      backgroundColor: const Color(0xFFE6E6FA),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,10 +42,10 @@ class TelaInicial extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF8A2BE2),
+                backgroundColor: const Color(0xFF8A2BE2),
                 padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -54,6 +54,26 @@ class TelaInicial extends StatelessWidget {
               onPressed: () {},
               child: const Text(
                 'JOGAR',
+                style: TextStyle(
+                  fontFamily: 'HangmanFont',
+                  fontSize: 28,
+                  color: Color(0xFF808080),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF8A2BE2),
+                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              onPressed: () {},
+              child: const Text(
+                'Mais',
                 style: TextStyle(
                   fontFamily: 'HangmanFont',
                   fontSize: 28,
