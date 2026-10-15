@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hangman_game/domain/answer_category.dart';
+import 'package:hangman_game/domain/difficulty.dart';
 import 'package:hangman_game/screens/game_screen.dart';
 import 'package:hangman_game/widgets/answer_board.dart';
 import 'package:hangman_game/widgets/hangman_character.dart';
@@ -31,12 +33,16 @@ Widget _app({
   ValueChanged<String>? onLetterSelected,
   VoidCallback? onRequestHint,
   VoidCallback? onPlayAgain,
+  ValueChanged<AnswerCategory>? onCategoryChanged,
+  ValueChanged<Difficulty>? onDifficultyChanged,
   VoidCallback? onExit,
 }) {
   return MaterialApp(
     home: GameScreen(
       categoryLabel: 'Animais',
+      onCategoryChanged: onCategoryChanged ?? (_) {},
       difficultyLabel: 'Fácil',
+      onDifficultyChanged: onDifficultyChanged ?? (_) {},
       mistakes: mistakes,
       maxMistakes: maxMistakes,
       status: status,
@@ -94,6 +100,36 @@ void main() {
     for (final String letter in letters.split('')) {
       expect(find.text(letter), findsOneWidget);
     }
+  });
+
+  testWidgets('permite selecionar outra categoria no topbar', (tester) async {
+    AnswerCategory? selectedCategory;
+    await _pump(
+      tester,
+      _app(onCategoryChanged: (category) => selectedCategory = category),
+    );
+
+    await tester.tap(find.text('Animais'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tecnologia').last);
+
+    expect(selectedCategory, AnswerCategory.technology);
+  });
+
+  testWidgets('permite selecionar outra dificuldade no topbar', (tester) async {
+    Difficulty? selectedDifficulty;
+    await _pump(
+      tester,
+      _app(
+        onDifficultyChanged: (difficulty) => selectedDifficulty = difficulty,
+      ),
+    );
+
+    await tester.tap(find.text('Fácil'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Difícil'));
+
+    expect(selectedDifficulty, Difficulty.hard);
   });
 
   testWidgets('dispara o callback ao tocar numa letra nova', (tester) async {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../domain/answer_category.dart';
+import '../domain/difficulty.dart';
 import '../theme/app_theme.dart';
 import '../widgets/answer_board.dart';
 import '../widgets/hangman_character.dart';
@@ -10,7 +12,9 @@ class GameScreen extends StatelessWidget {
   const GameScreen({
     super.key,
     required this.categoryLabel,
+    required this.onCategoryChanged,
     required this.difficultyLabel,
+    required this.onDifficultyChanged,
     required this.mistakes,
     required this.maxMistakes,
     required this.status,
@@ -26,7 +30,9 @@ class GameScreen extends StatelessWidget {
   });
 
   final String categoryLabel;
+  final ValueChanged<AnswerCategory> onCategoryChanged;
   final String difficultyLabel;
+  final ValueChanged<Difficulty> onDifficultyChanged;
   final int mistakes;
   final int maxMistakes;
   final CharacterStatus status;
@@ -56,7 +62,9 @@ class GameScreen extends StatelessWidget {
               children: <Widget>[
                 _TopBar(
                   categoryLabel: categoryLabel,
+                  onCategoryChanged: onCategoryChanged,
                   difficultyLabel: difficultyLabel,
+                  onDifficultyChanged: onDifficultyChanged,
                   onExit: onExit,
                 ),
                 const SizedBox(height: 8),
@@ -108,12 +116,16 @@ class GameScreen extends StatelessWidget {
 class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.categoryLabel,
+    required this.onCategoryChanged,
     required this.difficultyLabel,
+    required this.onDifficultyChanged,
     this.onExit,
   });
 
   final String categoryLabel;
+  final ValueChanged<AnswerCategory> onCategoryChanged;
   final String difficultyLabel;
+  final ValueChanged<Difficulty> onDifficultyChanged;
   final VoidCallback? onExit;
 
   @override
@@ -132,8 +144,31 @@ class _TopBar extends StatelessWidget {
             spacing: 8,
             runSpacing: 4,
             children: <Widget>[
-              _InfoChip(label: categoryLabel),
-              _InfoChip(label: difficultyLabel),
+              PopupMenuButton<AnswerCategory>(
+                onSelected: onCategoryChanged,
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<AnswerCategory>>[
+                      for (final AnswerCategory category
+                          in AnswerCategory.values)
+                        PopupMenuItem<AnswerCategory>(
+                          value: category,
+                          child: Text(category.label),
+                        ),
+                    ],
+                child: _InfoChip(label: categoryLabel, isButton: true),
+              ),
+              PopupMenuButton<Difficulty>(
+                onSelected: onDifficultyChanged,
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<Difficulty>>[
+                      for (final Difficulty difficulty in Difficulty.values)
+                        PopupMenuItem<Difficulty>(
+                          value: difficulty,
+                          child: Text(difficulty.label),
+                        ),
+                    ],
+                child: _InfoChip(label: difficultyLabel, isButton: true),
+              ),
             ],
           ),
         ),
@@ -143,9 +178,10 @@ class _TopBar extends StatelessWidget {
 }
 
 class _InfoChip extends StatelessWidget {
-  const _InfoChip({required this.label});
+  const _InfoChip({required this.label, this.isButton = false});
 
   final String label;
+  final bool isButton;
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +191,21 @@ class _InfoChip extends StatelessWidget {
         color: AppColors.accent,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: AppColors.onAccent,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.onAccent,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (isButton) ...<Widget>[
+            const SizedBox(width: 4),
+            const Icon(Icons.arrow_drop_down, color: AppColors.onAccent),
+          ],
+        ],
       ),
     );
   }
