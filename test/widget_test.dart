@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:hangman_game/domain/answer_category.dart';
+import 'package:hangman_game/domain/difficulty.dart';
 import 'package:hangman_game/main.dart';
 import 'package:hangman_game/screens/game_screen.dart';
 
@@ -26,6 +27,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text(AnswerCategory.technology.label), findsOneWidget);
+    expect(find.text('_'), findsWidgets);
+
+    await tester.tap(find.text(Difficulty.easy.label));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(Difficulty.hard.label));
+    await tester.pumpAndSettle();
+
+    expect(find.text(Difficulty.hard.label), findsOneWidget);
     expect(find.text('_'), findsWidgets);
   });
 }

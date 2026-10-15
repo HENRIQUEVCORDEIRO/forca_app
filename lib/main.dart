@@ -96,13 +96,14 @@ class _GameRoute extends StatefulWidget {
 }
 
 class _GameRouteState extends State<_GameRoute> {
-  static const int _maxMistakes = 6;
+  static const int _maxMistakes = 5;
 
   final AssetHangmanEntriesRepository _repository =
       AssetHangmanEntriesRepository();
   final Random _random = Random();
 
   AnswerCategory _category = AnswerCategory.animals;
+  Difficulty _difficulty = Difficulty.easy;
   HangmanEntry? _entry;
   List<HangmanEntry>? _entries;
   Set<String> _usedLetters = <String>{};
@@ -121,14 +122,19 @@ class _GameRouteState extends State<_GameRoute> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _startFreshGame());
   }
 
-  Future<void> _startFreshGame([AnswerCategory? category]) async {
+  Future<void> _startFreshGame({
+    AnswerCategory? category,
+    Difficulty? difficulty,
+  }) async {
     if (!mounted) return;
     final AnswerCategory nextCategory = category ?? _category;
+    final Difficulty nextDifficulty = difficulty ?? _difficulty;
     final HangmanEntry? previousEntry = _entry;
     final int loadGeneration = ++_loadGeneration;
 
     setState(() {
       _category = nextCategory;
+      _difficulty = nextDifficulty;
       _entry = null;
       _usedLetters = <String>{};
       _mistakes = 0;
@@ -146,23 +152,23 @@ class _GameRouteState extends State<_GameRoute> {
       final List<HangmanEntry> categoryEntries = entries
           .where((HangmanEntry entry) => entry.category == nextCategory)
           .toList();
-      final List<HangmanEntry> easyEntries = categoryEntries
-          .where((HangmanEntry entry) => entry.difficulty == Difficulty.easy)
+      final List<HangmanEntry> matchingEntries = categoryEntries
+          .where((HangmanEntry entry) => entry.difficulty == nextDifficulty)
           .toList();
-      final List<HangmanEntry> candidates =
-          (easyEntries.isEmpty ? categoryEntries : easyEntries).toList();
 
-      if (candidates.isEmpty) {
-        throw StateError('Nenhuma palavra disponível para esta categoria.');
+      if (matchingEntries.isEmpty) {
+        throw StateError(
+          'Nenhuma palavra disponível para esta categoria e dificuldade.',
+        );
       }
-      if (previousEntry != null && candidates.length > 1) {
-        candidates.removeWhere(
+      if (previousEntry != null && matchingEntries.length > 1) {
+        matchingEntries.removeWhere(
           (HangmanEntry entry) => entry.answer == previousEntry.answer,
         );
       }
 
       final HangmanEntry selectedEntry =
-          candidates[_random.nextInt(candidates.length)];
+          matchingEntries[_random.nextInt(matchingEntries.length)];
       if (!mounted || loadGeneration != _loadGeneration) return;
 
       setState(() {
@@ -266,7 +272,7 @@ class _GameRouteState extends State<_GameRoute> {
     return GameScreen(
       key: ValueKey<int>(_gameRevision),
       categoryLabel: _category.label,
-      difficultyLabel: _entry!.difficulty.label,
+      difficultyLabel: _difficulty.label,
       mistakes: _mistakes,
       maxMistakes: _maxMistakes,
       status: _status,
@@ -277,7 +283,10 @@ class _GameRouteState extends State<_GameRoute> {
       onLetterSelected: _selectLetter,
       onRequestHint: _requestHint,
       onPlayAgain: () => _startFreshGame(),
-      onCategoryChanged: (AnswerCategory category) => _startFreshGame(category),
+      onCategoryChanged: (AnswerCategory category) =>
+          _startFreshGame(category: category),
+      onDifficultyChanged: (Difficulty difficulty) =>
+          _startFreshGame(difficulty: difficulty),
       onExit: widget.onExit,
     );
   }

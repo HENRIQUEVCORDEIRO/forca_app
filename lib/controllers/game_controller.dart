@@ -9,7 +9,7 @@ class GameController extends ChangeNotifier {
   Difficulty? selectedDifficulty;
 
   int errors = 0;
-  final int maxErrors = 6;
+  final int maxErrors = 5;
   bool isGameOver = false;
   bool isGameWon = false;
 

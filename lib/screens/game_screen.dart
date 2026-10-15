@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../domain/answer_category.dart';
+import '../domain/difficulty.dart';
 import '../theme/app_theme.dart';
 import '../widgets/answer_board.dart';
 import '../widgets/hangman_character.dart';
@@ -13,6 +14,7 @@ class GameScreen extends StatelessWidget {
     required this.categoryLabel,
     required this.onCategoryChanged,
     required this.difficultyLabel,
+    required this.onDifficultyChanged,
     required this.mistakes,
     required this.maxMistakes,
     required this.status,
@@ -30,6 +32,7 @@ class GameScreen extends StatelessWidget {
   final String categoryLabel;
   final ValueChanged<AnswerCategory> onCategoryChanged;
   final String difficultyLabel;
+  final ValueChanged<Difficulty> onDifficultyChanged;
   final int mistakes;
   final int maxMistakes;
   final CharacterStatus status;
@@ -61,6 +64,7 @@ class GameScreen extends StatelessWidget {
                   categoryLabel: categoryLabel,
                   onCategoryChanged: onCategoryChanged,
                   difficultyLabel: difficultyLabel,
+                  onDifficultyChanged: onDifficultyChanged,
                   onExit: onExit,
                 ),
                 const SizedBox(height: 8),
@@ -114,12 +118,14 @@ class _TopBar extends StatelessWidget {
     required this.categoryLabel,
     required this.onCategoryChanged,
     required this.difficultyLabel,
+    required this.onDifficultyChanged,
     this.onExit,
   });
 
   final String categoryLabel;
   final ValueChanged<AnswerCategory> onCategoryChanged;
   final String difficultyLabel;
+  final ValueChanged<Difficulty> onDifficultyChanged;
   final VoidCallback? onExit;
 
   @override
@@ -151,7 +157,18 @@ class _TopBar extends StatelessWidget {
                     ],
                 child: _InfoChip(label: categoryLabel, isButton: true),
               ),
-              _InfoChip(label: difficultyLabel),
+              PopupMenuButton<Difficulty>(
+                onSelected: onDifficultyChanged,
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<Difficulty>>[
+                      for (final Difficulty difficulty in Difficulty.values)
+                        PopupMenuItem<Difficulty>(
+                          value: difficulty,
+                          child: Text(difficulty.label),
+                        ),
+                    ],
+                child: _InfoChip(label: difficultyLabel, isButton: true),
+              ),
             ],
           ),
         ),

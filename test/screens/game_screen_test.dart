@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hangman_game/domain/answer_category.dart';
+import 'package:hangman_game/domain/difficulty.dart';
 import 'package:hangman_game/screens/game_screen.dart';
 import 'package:hangman_game/widgets/answer_board.dart';
 import 'package:hangman_game/widgets/hangman_character.dart';
@@ -33,6 +34,7 @@ Widget _app({
   VoidCallback? onRequestHint,
   VoidCallback? onPlayAgain,
   ValueChanged<AnswerCategory>? onCategoryChanged,
+  ValueChanged<Difficulty>? onDifficultyChanged,
   VoidCallback? onExit,
 }) {
   return MaterialApp(
@@ -40,6 +42,7 @@ Widget _app({
       categoryLabel: 'Animais',
       onCategoryChanged: onCategoryChanged ?? (_) {},
       difficultyLabel: 'Fácil',
+      onDifficultyChanged: onDifficultyChanged ?? (_) {},
       mistakes: mistakes,
       maxMistakes: maxMistakes,
       status: status,
@@ -111,6 +114,22 @@ void main() {
     await tester.tap(find.text('Tecnologia').last);
 
     expect(selectedCategory, AnswerCategory.technology);
+  });
+
+  testWidgets('permite selecionar outra dificuldade no topbar', (tester) async {
+    Difficulty? selectedDifficulty;
+    await _pump(
+      tester,
+      _app(
+        onDifficultyChanged: (difficulty) => selectedDifficulty = difficulty,
+      ),
+    );
+
+    await tester.tap(find.text('Fácil'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Difícil'));
+
+    expect(selectedDifficulty, Difficulty.hard);
   });
 
   testWidgets('dispara o callback ao tocar numa letra nova', (tester) async {
