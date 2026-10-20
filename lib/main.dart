@@ -27,58 +27,33 @@ class TelaInicial extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset('assets/forca.png', height: 350),
-                const Text(
-                  'HANGMAN',
-                  style: TextStyle(
-                    fontFamily: 'HangmanFont',
-                    fontSize: 48,
-                    color: Color(0xFF8A2BE2),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            const Text(
+              'HANGMAN',
+              style: TextStyle(
+                fontSize: 48,
+                color: Color(0xFF8A2BE2),
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8A2BE2),
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8A2BE2),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-              ),
-              onPressed: () {},
-              child: const Text(
-                'JOGAR',
-                style: TextStyle(
-                  fontFamily: 'HangmanFont',
-                  fontSize: 28,
-                  color: Color(0xFF808080),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8A2BE2),
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              onPressed: () {},
-              child: const Text(
-                'Mais',
-                style: TextStyle(
-                  fontFamily: 'HangmanFont',
-                  fontSize: 28,
-                  color: Color(0xFF808080),
-                  fontWeight: FontWeight.bold,
+                onPressed: () {},
+                child: const Text(
+                  'JOGAR',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Color(0xFF808080),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
