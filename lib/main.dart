@@ -57,6 +57,28 @@ class TelaInicial extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 15),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8A2BE2),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () {},
+                child: const Text(
+                  'MAIS',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Color(0xFF808080),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
